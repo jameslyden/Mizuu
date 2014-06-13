@@ -153,6 +153,7 @@ public class MizLib {
 	public static final String TRAKT_API = "b85f6110fd2522022bc53614965415bf";
 	public static final String CHARACTER_REGEX = "[^\\w\\s]";
 	public static final String[] prefixes = new String[]{"the ", "a ", "an "};
+	public static final String ALT_OFFLINE_PATH = "/Removable/MicroSD/mizuu";
 
 	public static final int SECOND = 1000;
 	public static final int MINUTE = 60 * SECOND;
@@ -2325,7 +2326,15 @@ public class MizLib {
 	}
 
 	public static File getAvailableOfflineFolder(Context c) {
-		File f = new File(c.getExternalFilesDir(null) + "/offline_storage");
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(c);
+		boolean mAltOfflinePath = settings.getBoolean("prefsAltOfflinePath", false);
+
+		File f;
+		if (mAltOfflinePath)
+			f = new File(ALT_OFFLINE_PATH + "/offline_storage");
+		else
+			f = new File(c.getExternalFilesDir(null) + "/offline_storage");
+
 		f.mkdirs();
 		return f;
 	}
