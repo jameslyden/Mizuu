@@ -137,6 +137,7 @@ public class MizLib {
 	public static final String tvdbLanguages = "en,sv,no,da,fi,nl,de,it,es,fr,pl,hu,el,tr,ru,he,ja,pt,zh,cs,sl,hr,ko";
 	public static final String allFileTypes = ".3gp.aaf.mp4.ts.webm.m4v.mkv.divx.xvid.rec.avi.flv.f4v.moi.mpeg.mpg.mts.m2ts.ogv.rm.rmvb.mov.wmv.iso.vob.ifo.wtv.pyv.ogm.img";
 	public static final String IMAGE_CACHE_DIR = "thumbs";
+    public static final String altOfflinePath = "/Removable/MicroSD/mizuu";
 	public static final String TMDB_BASE_URL = "http://image.tmdb.org/t/p/";
 	public static final String TMDB_API = "8f5f9f44983b8af692aae5f9974500f8";
 	public static final String TVDBAPI = "1CB9725D261FAF38";
@@ -2234,7 +2235,15 @@ public class MizLib {
 	}
 
 	public static File getAvailableOfflineFolder(Context c) {
-		File f = new File(c.getExternalFilesDir(null) + "/offline_storage");
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(c);
+        boolean mAltOfflinePath = settings.getBoolean("prefsAltOfflinePath", false);
+
+        File f;
+        if (mAltOfflinePath)
+            f = new File(altOfflinePath + "/offline_storage");
+        else
+            f = new File(c.getExternalFilesDir(null) + "/offline_storage");
+
 		f.mkdirs();
 		return f;
 	}
